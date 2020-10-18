@@ -23,7 +23,7 @@ public class AccountingServiceImpl implements AccountingService{
 	@Override
 	public void sell(TransactionRecord transaction) {
 		Double previousBalance = accountBalance;
-		accountBalance += transaction.getAmount();
+		accountBalance += Math.abs(transaction.getAmount());
 		Loggers.accounts.info("Added Rs {} into account due to selling of {} quantity of {} on {}. Previous Balance: {}, New balance: {}"
 				, transaction.getAmount(), transaction.getStock(), transaction.getQuantity(), transaction.getDate(), previousBalance, accountBalance);
 	}
@@ -34,7 +34,7 @@ public class AccountingServiceImpl implements AccountingService{
 			throw new RuntimeException("Insufficient balance ("+accountBalance+") for transaction: "+transaction);
 		}
 		Double previousBalance = accountBalance;
-		accountBalance -= transaction.getAmount();
+		accountBalance -= Math.abs(transaction.getAmount());
 		if(accountBalance < 0) {
 			accountBalance = 0d;		//10 paisa rounding error allowed
 		}

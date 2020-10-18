@@ -18,9 +18,11 @@ import javax.annotation.PostConstruct;
 import org.apache.commons.io.FileUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.commons.lang3.time.FastDateFormat;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import com.crizillion.manthan.infra.Loggers;
+import com.crizillion.manthan.pojo.BhavRecord;
 import com.crizillion.manthan.pojo.IndexRecord;
 import com.crizillion.manthan.pojo.Month;
 import com.crizillion.manthan.pojo.RecordType;
@@ -30,6 +32,7 @@ public class IndexServiceImpl implements IndexService{
 	
 	private Set<Month> months = new TreeSet<>();
 	private List<IndexRecord> masterRecords = new ArrayList<>();
+	@Autowired private BhavService bhavService;
 	
 	@PostConstruct
 	public void init() throws Exception{
@@ -55,15 +58,14 @@ public class IndexServiceImpl implements IndexService{
 
 	private void parseMasterRecords(List<String> records, RecordType recordType, Date date) {
 		List<IndexRecord> parsedRecords = records.stream().filter(r -> r.matches("^(\\d\\d?).*$")).map(r -> {
-			String [] splittedParts = r.split(",");
-			IndexRecord m = new IndexRecord();
-			m.setDate(date);
+			String [] splittedParts = r.replaceAll("^(.*)\"(.*)\"(.*)$", "$1 UNKNOWN $3").split(",");
+			IndexRecord m = new IndexRecord(splittedParts[1], date);
 			m.setType(recordType);
-			m.setStock(splittedParts[1]);
 			m.setStockName(splittedParts[2]);
 			m.setIndustry(splittedParts[3]);
-			//m.setPrice(Double.valueOf(splittedParts[5]));
-			m.setWeight(Double.valueOf(splittedParts[6]));
+			BhavRecord priceData = bhavService.getFirstDayData(m.getStock(), m.getMonth());
+			m.setPrice(priceData.getClose());
+			m.setWeight(Double.valueOf(splittedParts[6].replaceAll("\"", "")));
 			return m;
 		}).collect(Collectors.toList());
 		
@@ -85,5 +87,4 @@ public class IndexServiceImpl implements IndexService{
 	public List<IndexRecord> getIndexRecords(Predicate<IndexRecord> predicate) {
 		return masterRecords.stream().filter(predicate).collect(Collectors.toList());
 	}
-	
 }

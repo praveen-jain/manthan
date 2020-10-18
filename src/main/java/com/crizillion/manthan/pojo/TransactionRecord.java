@@ -8,7 +8,10 @@ public class TransactionRecord {
 	private String stock;
 	private Double price;
 	private Double quantity;
+	private Double allocationPct;
 	private String comment;
+	private Double accountBalanceBeforeTransaction;
+	private Double accountBalanceAfterTransaction;
 	
 	public String getStock() {
 		return stock;
@@ -48,6 +51,24 @@ public class TransactionRecord {
 	}
 	public Double getAmount() {
 		return this.quantity * this.price;
+	}
+	public Double getAllocationPct() {
+		return allocationPct;
+	}
+	public void setAllocationPct(Double allocationPct) {
+		this.allocationPct = allocationPct;
+	}
+	public Double getAccountBalanceBeforeTransaction() {
+		return accountBalanceBeforeTransaction;
+	}
+	public void setAccountBalanceBeforeTransaction(Double accountBalanceBeforeTransaction) {
+		this.accountBalanceBeforeTransaction = accountBalanceBeforeTransaction;
+	}
+	public Double getAccountBalanceAfterTransaction() {
+		return accountBalanceAfterTransaction;
+	}
+	public void setAccountBalanceAfterTransaction(Double accountBalanceAfterTransaction) {
+		this.accountBalanceAfterTransaction = accountBalanceAfterTransaction;
 	}
 	@Override
 	public String toString() {

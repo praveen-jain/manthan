@@ -2,6 +2,8 @@ package com.crizillion.manthan.pojo;
 
 import java.util.Date;
 
+import org.apache.commons.lang3.Validate;
+
 public class IndexRecord {
 	
 	private RecordType type;
@@ -12,21 +14,20 @@ public class IndexRecord {
 	private Double price;
 	private Double mcap;
 	private Double weight;
+	private Month month;
 
-	public Date getDate() {
-		return date;
-	}
-	public void setDate(Date date) {
+	public IndexRecord(String stock, Date date) {
+		Validate.notNull(date);
+		Validate.notNull(stock);
 		this.date = date;
-	}
-	public Month getMonth() {
-		return new Month(date);
+		this.stock = stock;
+		this.month = new Month(date);
 	}
 	public String getStock() {
 		return stock;
 	}
-	public void setStock(String stock) {
-		this.stock = stock;
+	public Date getDate() {
+		return date;
 	}
 	public Double getPrice() {
 		return price;
@@ -63,6 +64,12 @@ public class IndexRecord {
 	}
 	public void setType(RecordType type) {
 		this.type = type;
+	}
+	public Month getMonth() {
+		return month;
+	}
+	public PriceData getPriceData() {
+		return new PriceData(stock, date, price);
 	}
 	@Override
 	public String toString() {

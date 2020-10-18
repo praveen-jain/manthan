@@ -2,6 +2,8 @@ package com.crizillion.manthan.pojo;
 
 import java.util.Date;
 
+import org.apache.commons.lang3.Validate;
+
 public class BhavRecord {
 	
 	private RecordType type = RecordType.BHAV;
@@ -12,6 +14,15 @@ public class BhavRecord {
 	private Double high;
 	private Double low;
 	private Double close;
+	private Month month;
+	
+	public BhavRecord(Date date, String stock) {
+		Validate.notNull(date);
+		Validate.notNull(stock);
+		this.date = date;
+		this.month = new Month(this.date);
+		this.stock = stock;
+	}
 	public RecordType getType() {
 		return type;
 	}
@@ -21,14 +32,8 @@ public class BhavRecord {
 	public Date getDate() {
 		return date;
 	}
-	public void setDate(Date date) {
-		this.date = date;
-	}
 	public String getStock() {
 		return stock;
-	}
-	public void setStock(String stock) {
-		this.stock = stock;
 	}
 	public String getSeries() {
 		return series;
@@ -59,6 +64,12 @@ public class BhavRecord {
 	}
 	public void setClose(Double close) {
 		this.close = close;
+	}
+	public Month getMonth() {
+		return month;
+	}
+	public PriceData getPriceData() {
+		return new PriceData(stock, date, close);
 	}
 	@Override
 	public String toString() {

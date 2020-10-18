@@ -58,4 +58,11 @@ public class StockSummary {
 	public void setStock(String stock) {
 		this.stock = stock;
 	}
+	@Override
+	public String toString() {
+		return "StockSummary [stock=" + stock + ", investedQuantity=" + investedQuantity + ", investedAmount="
+				+ investedAmount + ", currentValue=" + currentValue + ", plAmount=" + plAmount + ", plPercent="
+				+ plPercent + ", totalBuys=" + totalBuys + ", totalSells=" + totalSells + "]";
+	}
+	
 }

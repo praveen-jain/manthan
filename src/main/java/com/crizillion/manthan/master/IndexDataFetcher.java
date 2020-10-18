@@ -4,6 +4,7 @@ import java.io.ByteArrayInputStream;
 import java.io.File;
 import java.net.URI;
 import java.util.Date;
+import java.util.zip.ZipEntry;
 import java.util.zip.ZipInputStream;
 
 import org.apache.commons.io.FileUtils;
@@ -22,9 +23,11 @@ public class IndexDataFetcher {
 				System.out.println("Going to fetch data for month: "+month);
 				byte[] response = new RestTemplate().getForObject(new URI("https://www1.nseindia.com/content/indices/mcwb_"+month+".zip"), byte[].class);
 				ZipInputStream zis = new ZipInputStream(new ByteArrayInputStream(response));
-				while ((zis.getNextEntry()) != null) {
+				FileUtils.writeByteArrayToFile(new File("masters/index/"+month+".zip"), response);
+				ZipEntry zipEntry = null;
+				while ((zipEntry = zis.getNextEntry()) != null) {
 					byte [] entry = zis.readAllBytes();
-					if(new String(entry).contains("JUNIOR INDEX") || new String(entry).contains("Next 50")) {
+					if(zipEntry.getName().contains("jr") || zipEntry.getName().contains("next")) {
 						FileUtils.writeByteArrayToFile(new File("masters/next50/"+month+".csv"), entry);
 					}else {
 						FileUtils.writeByteArrayToFile(new File("masters/nifty/"+month+".csv"), entry);
