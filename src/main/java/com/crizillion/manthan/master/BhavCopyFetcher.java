@@ -6,18 +6,18 @@ import java.net.URI;
 import java.util.Date;
 import java.util.zip.ZipInputStream;
 
+import com.crizillion.manthan.infra.Loggers;
 import org.apache.commons.io.FileUtils;
+import org.apache.commons.io.IOUtils;
 import org.apache.commons.lang3.time.DateUtils;
 import org.apache.commons.lang3.time.FastDateFormat;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.RequestEntity;
 import org.springframework.web.client.RestTemplate;
 
-import com.crizillion.manthan.infra.Loggers;
-
 public class BhavCopyFetcher {
 	
-	public static void main(String[] args) throws Exception{
+	public static void main1(String[] args) throws Exception{
 		Date startDate = FastDateFormat.getInstance("ddMMyyyy").parse("01012016");
 		for(int i=0;i<1000; i++) {
 			Date date = DateUtils.addDays(startDate, -i);
@@ -38,7 +38,7 @@ public class BhavCopyFetcher {
 				byte[] response = new RestTemplate().exchange(entity, byte[].class).getBody();
 				ZipInputStream zis = new ZipInputStream(new ByteArrayInputStream(response));
 				while ((zis.getNextEntry()) != null) {
-					byte [] entry = zis.readAllBytes();
+					byte [] entry = IOUtils.toByteArray(zis);
 					FileUtils.writeByteArrayToFile(new File("masters/bhav/"+FastDateFormat.getInstance("yyyyMMdd").format(date)+".csv"), entry);
 		        }	
 			}catch(Exception e) {

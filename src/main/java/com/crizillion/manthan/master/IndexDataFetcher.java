@@ -8,6 +8,7 @@ import java.util.zip.ZipEntry;
 import java.util.zip.ZipInputStream;
 
 import org.apache.commons.io.FileUtils;
+import org.apache.commons.io.IOUtils;
 import org.apache.commons.lang3.time.DateUtils;
 import org.apache.commons.lang3.time.FastDateFormat;
 import org.springframework.web.client.RestTemplate;
@@ -26,7 +27,7 @@ public class IndexDataFetcher {
 				FileUtils.writeByteArrayToFile(new File("masters/index/"+month+".zip"), response);
 				ZipEntry zipEntry = null;
 				while ((zipEntry = zis.getNextEntry()) != null) {
-					byte [] entry = zis.readAllBytes();
+					byte [] entry = IOUtils.toByteArray(zis);
 					if(zipEntry.getName().contains("jr") || zipEntry.getName().contains("next")) {
 						FileUtils.writeByteArrayToFile(new File("masters/next50/"+month+".csv"), entry);
 					}else {

@@ -33,13 +33,21 @@ import com.crizillion.manthan.transaction.TransactionService;
 @Service
 public class Top25PctEachMonth implements AlgorithmExecutor{
 	
-	@Autowired private IndexService indexService;
-	@Autowired private TransactionService transactionService;
-	@Autowired private AccountingService accountingService;
-	@Autowired private BhavService bhavService;
+	private final IndexService indexService;
+	private final TransactionService transactionService;
+	private final AccountingService accountingService;
+	private final BhavService bhavService;
 	private List<TransactionRecord> transactions = new ArrayList<>();
 	private Month currentMonth;
-	
+
+	public Top25PctEachMonth(IndexService indexService, TransactionService transactionService,
+							 AccountingService accountingService, BhavService bhavService) {
+		this.indexService = indexService;
+		this.transactionService = transactionService;
+		this.accountingService = accountingService;
+		this.bhavService = bhavService;
+	}
+
 	public void execute(){
 		List<Month> months = new ArrayList<>(indexService.getMonths());
 		months.stream().forEach(m -> executeMonth(m));

@@ -8,7 +8,7 @@ import com.crizillion.manthan.pojo.TransactionRecord;
 @Service
 public class AccountingServiceImpl implements AccountingService{
 	
-	private Double accountBalance = Double.valueOf(0);
+	private Double accountBalance = (double) 0;
 	
 	@Override
 	public void reset() {
